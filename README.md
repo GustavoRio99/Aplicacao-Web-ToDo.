@@ -6,8 +6,8 @@ Este projeto foi criado como um exercício prático para aplicar conceitos de de
 🎨 Visual do Projeto
 A interface utiliza o Neumorfismo, um estilo de design que usa sombras e luzes suaves para criar uma aparência tátil e moderna, fazendo com que os elementos pareçam flutuar na tela.
 
-(Aqui você pode adicionar um screenshot da sua aplicação em execução)
-[Imagem da aplicação GTD Master em execução]
+<img width="1197" height="773" alt="image" src="https://github.com/user-attachments/assets/075c6639-665e-4852-8452-02285595a42a" />
+
 
 ✨ Funcionalidades
 Adicionar Tarefas: Crie novas tarefas através de um campo de texto intuitivo.
@@ -89,4 +89,5 @@ src/main/resources/
 
 📄 Licença
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
+
 
