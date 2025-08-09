@@ -54,7 +54,7 @@ Passos:
 
 Clone o repositório:
 
-git clone https://github.com/seu-usuario/seu-repositorio.git
+git clone https://github.com/GustavoRio99/Aplicacao-Web-ToDo..git
 cd seu-repositorio
 
 Compile o projeto com o Maven:
@@ -89,5 +89,6 @@ src/main/resources/
 
 📄 Licença
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
+
 
 
