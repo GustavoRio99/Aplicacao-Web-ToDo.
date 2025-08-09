@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTD Master - Edição Exclusiva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e0e5ec; /* Cor de fundo base para o Neumorfismo */
+        }
+        
+        /* Estilos para os elementos Neumórficos */
+        .neumorphic-outset {
+            border-radius: 20px;
+            background: #e0e5ec;
+            box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 16px #ffffff;
+        }
+
+        .neumorphic-inset {
+            border-radius: 20px;
+            background: #e0e5ec;
+            box-shadow: inset 7px 7px 15px #a3b1c6, inset -7px -7px 15px #ffffff;
+        }
+
+        .neumorphic-button {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .neumorphic-button:hover {
+            box-shadow: 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+        }
+
+        .neumorphic-button:active {
+            border-radius: 20px;
+            background: #e0e5ec;
+            box-shadow: inset 5px 5px 10px #a3b1c6, inset -5px -5px 10px #ffffff;
+        }
+
+        /* Estilo para a tarefa concluída */
+        .completed .task-text {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body class="text-gray-700">
+
+    <div class="container mx-auto max-w-2xl px-4 py-8 md:py-16">
+        
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800">GTD Master</h1>
+            <p class="text-gray-500 mt-2">Edição Neumórfica</p>
+        </header>
+
+        <main class="neumorphic-outset p-6 md:p-8">
+            
+            <!-- Formulário para adicionar nova tarefa -->
+            <form method="post" th:action="@{/adicionar}" class="flex items-center gap-4 mb-8">
+                <input type="text" name="descricao" placeholder="Qual a próxima tarefa?" class="neumorphic-inset flex-grow w-full px-5 py-4 bg-transparent border-none rounded-2xl focus:outline-none" required />
+                <button type="submit" class="neumorphic-button neumorphic-outset bg-transparent text-emerald-600 font-bold px-6 py-4 rounded-2xl">Adicionar</button>
+            </form>
+
+            <div id="task-list-container">
+                <!-- Lista de tarefas -->
+                <ul class="space-y-4">
+                    <!-- O Thymeleaf repete este 'li' para cada "tarefa" na lista -->
+                    <li th:each="tarefa : ${tarefas}" class="neumorphic-outset task-item flex items-center gap-4 p-4" th:classappend="${tarefa.concluido} ? 'opacity-60'">
+                        
+                        <!-- Status da Tarefa -->
+                        <span class="font-mono text-xl" th:text="${tarefa.concluido ? '✅' : '⚪️'}"></span>
+                        
+                        <!-- Descrição da Tarefa -->
+                        <span class="task-text flex-grow" th:text="${tarefa.descricao}">Descrição da tarefa aqui</span>
+                        
+                        <!-- Ações -->
+                        <div class="actions flex items-center gap-3">
+                            <!-- Link para marcar como concluída -->
+                            <a th:if="${!tarefa.concluido}" th:href="@{/marcar-concluida/{id}(id=${tarefa.id})}" class="neumorphic-button neumorphic-outset text-sm font-medium text-blue-500 hover:text-blue-700 transition p-3 rounded-full h-10 w-10 flex items-center justify-center">✔</a>
+                            
+                            <!-- Link para remover a tarefa -->
+                            <a th:href="@{/remover/{id}(id=${tarefa.id})}" class="neumorphic-button neumorphic-outset text-sm font-medium text-red-500 hover:text-red-700 transition p-3 rounded-full h-10 w-10 flex items-center justify-center">🗑</a>
+                        </div>
+                    </li>
+                </ul>
+                
+                <!-- Mensagem para quando a lista estiver vazia -->
+                <div th:if="${tarefas.isEmpty()}" class="text-center text-gray-500 py-10">
+                    <p>Sua tela está limpa. Adicione uma tarefa para começar!</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="text-center mt-12 text-gray-500 text-sm">
+            <p>&copy; 2025 GTD Master. Design Exclusivo.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
