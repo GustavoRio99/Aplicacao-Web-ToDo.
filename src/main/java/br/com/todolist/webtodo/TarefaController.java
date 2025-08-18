@@ -46,5 +46,18 @@ public class TarefaController {
         tarefas.removeIf(tarefa -> tarefa.getId() == id);
         return "redirect:/";
     }
+    
+  @PostMapping("/editar")
+public String editarTarefa(@RequestParam("id") long id, @RequestParam("descricao") String novaDescricao) {
+    // Itera sobre a lista de tarefas para encontrar a correta
+    for (Tarefa tarefa : tarefas) {
+        if (tarefa.getId() == id) {
+            tarefa.setDescricao(novaDescricao);
+            break; 
+        }
+    }
+    return "redirect:/";
+}
+    
 }
   

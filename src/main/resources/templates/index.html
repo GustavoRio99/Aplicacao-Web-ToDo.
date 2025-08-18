@@ -11,44 +11,53 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #e0e5ec; /* Cor de fundo base para o Neumorfismo */
+            background-color: #e0e5ec;
         }
-        
-        /* Estilos para os elementos Neumórficos */
         .neumorphic-outset {
             border-radius: 20px;
             background: #e0e5ec;
             box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 16px #ffffff;
+            transition: all 0.2s ease-in-out;
         }
-
         .neumorphic-inset {
-            border-radius: 20px;
+            border-radius: 12px;
             background: #e0e5ec;
             box-shadow: inset 7px 7px 15px #a3b1c6, inset -7px -7px 15px #ffffff;
         }
-
-        .neumorphic-button {
-            transition: all 0.2s ease-in-out;
-        }
-
         .neumorphic-button:hover {
             box-shadow: 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
         }
-
         .neumorphic-button:active {
-            border-radius: 20px;
-            background: #e0e5ec;
             box-shadow: inset 5px 5px 10px #a3b1c6, inset -5px -5px 10px #ffffff;
         }
-
-        /* Estilo para a tarefa concluída */
         .completed .task-text {
             text-decoration: line-through;
             color: #9ca3af;
         }
+        .task-text {
+            cursor: pointer;
+        }
+        .edit-input {
+            display: none;
+        }
+        .popup-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body class="text-gray-700">
+
+    <!-- Popup de Boas-Vindas -->
+    <div id="welcome-popup" class="popup-overlay fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center p-4 z-50">
+        <div class="neumorphic-outset max-w-sm w-full p-8 text-center space-y-4">
+            <h2 class="text-2xl font-bold text-gray-800">Bem-vindo ao GTD Master!</h2>
+            <div class="text-left text-gray-600 space-y-2">
+                <p>💡 **Dica:** Para editar uma tarefa, basta clicar sobre o texto dela.</p>
+                <p>✅ **Dica:** Clique no ícone (⚪️/✅) para marcar uma tarefa como concluída.</p>
+            </div>
+            <button id="close-popup-btn" class="neumorphic-button neumorphic-outset w-full mt-4 py-3 font-bold text-emerald-600 rounded-xl">Entendi!</button>
+        </div>
+    </div>
 
     <div class="container mx-auto max-w-2xl px-4 py-8 md:py-16">
         
@@ -59,36 +68,32 @@
 
         <main class="neumorphic-outset p-6 md:p-8">
             
-            <!-- Formulário para adicionar nova tarefa -->
             <form method="post" th:action="@{/adicionar}" class="flex items-center gap-4 mb-8">
-                <input type="text" name="descricao" placeholder="Qual a próxima tarefa?" class="neumorphic-inset flex-grow w-full px-5 py-4 bg-transparent border-none rounded-2xl focus:outline-none" required />
-                <button type="submit" class="neumorphic-button neumorphic-outset bg-transparent text-emerald-600 font-bold px-6 py-4 rounded-2xl">Adicionar</button>
+                <input type="text" name="descricao" placeholder="Qual a próxima tarefa?" class="neumorphic-inset flex-grow w-full px-5 py-4 bg-transparent border-none rounded-xl focus:outline-none" required />
+                <button type="submit" class="neumorphic-button neumorphic-outset bg-transparent text-emerald-600 font-bold px-6 py-4 rounded-xl">Adicionar</button>
             </form>
 
             <div id="task-list-container">
-                <!-- Lista de tarefas -->
                 <ul class="space-y-4">
-                    <!-- O Thymeleaf repete este 'li' para cada "tarefa" na lista -->
-                    <li th:each="tarefa : ${tarefas}" class="neumorphic-outset task-item flex items-center gap-4 p-4" th:classappend="${tarefa.concluido} ? 'opacity-60'">
+                    <li th:each="tarefa, iterStat : ${tarefas}" class="neumorphic-outset task-item flex items-center gap-4 p-4" th:classappend="${tarefa.concluido} ? 'opacity-60 completed'">
                         
-                        <!-- Status da Tarefa -->
-                        <span class="font-mono text-xl" th:text="${tarefa.concluido ? '✅' : '⚪️'}"></span>
+                        <a th:href="@{/marcar-concluida/{id}(id=${tarefa.id})}" class="neumorphic-button rounded-full p-2">
+                            <span class="font-mono text-xl" th:text="${tarefa.concluido ? '✅' : '⚪️'}"></span>
+                        </a>
                         
-                        <!-- Descrição da Tarefa -->
-                        <span class="task-text flex-grow" th:text="${tarefa.descricao}">Descrição da tarefa aqui</span>
-                        
-                        <!-- Ações -->
-                        <div class="actions flex items-center gap-3">
-                            <!-- Link para marcar como concluída -->
-                            <a th:if="${!tarefa.concluido}" th:href="@{/marcar-concluida/{id}(id=${tarefa.id})}" class="neumorphic-button neumorphic-outset text-sm font-medium text-blue-500 hover:text-blue-700 transition p-3 rounded-full h-10 w-10 flex items-center justify-center">✔</a>
+                        <div class="flex-grow">
+                            <span th:id="'view-text-' + ${iterStat.index}" class="task-text" th:text="${tarefa.descricao}" th:onclick="'enterEditMode(' + ${iterStat.index} + ')'"></span>
                             
-                            <!-- Link para remover a tarefa -->
-                            <a th:href="@{/remover/{id}(id=${tarefa.id})}" class="neumorphic-button neumorphic-outset text-sm font-medium text-red-500 hover:text-red-700 transition p-3 rounded-full h-10 w-10 flex items-center justify-center">🗑</a>
+                            <form th:id="'edit-form-' + ${iterStat.index}" class="edit-input" method="post" th:action="@{/editar}">
+                                <input type="hidden" name="id" th:value="${tarefa.id}" />
+                                <input type="text" name="descricao" th:value="${tarefa.descricao}" class="neumorphic-inset w-full px-4 py-2 bg-transparent border-none focus:outline-none" required />
+                            </form>
                         </div>
+                        
+                        <a th:href="@{/remover/{id}(id=${tarefa.id})}" class="neumorphic-button neumorphic-outset text-red-500 p-3 rounded-full h-10 w-10 flex items-center justify-center">🗑</a>
                     </li>
                 </ul>
                 
-                <!-- Mensagem para quando a lista estiver vazia -->
                 <div th:if="${tarefas.isEmpty()}" class="text-center text-gray-500 py-10">
                     <p>Sua tela está limpa. Adicione uma tarefa para começar!</p>
                 </div>
@@ -99,6 +104,68 @@
             <p>&copy; 2025 GTD Master. Design Exclusivo.</p>
         </footer>
     </div>
+
+    <script>
+        // Função para alternar para o modo de edição
+        function enterEditMode(index) {
+            const viewText = document.getElementById('view-text-' + index);
+            const editForm = document.getElementById('edit-form-' + index);
+            const editInput = editForm.querySelector('input[name="descricao"]');
+
+            viewText.style.display = 'none';
+            editForm.style.display = 'block';
+            editInput.focus();
+            editInput.select();
+
+            const exitEditMode = (submitForm) => {
+                if (submitForm) {
+                    editForm.submit();
+                } else {
+                    viewText.style.display = 'block';
+                    editForm.style.display = 'none';
+                }
+            };
+
+            editInput.addEventListener('blur', () => exitEditMode(true));
+            editInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    exitEditMode(true);
+                } else if (e.key === 'Escape') {
+                    exitEditMode(false);
+                }
+            });
+        }
+
+        // Lógica para controlar o popup
+        document.addEventListener('DOMContentLoaded', function() {
+            const popup = document.getElementById('welcome-popup');
+            const closeBtn = document.getElementById('close-popup-btn');
+
+            // Verifica no localStorage se o popup já foi exibido
+            if (localStorage.getItem('gtdMasterPopupShown') === 'true') {
+                popup.style.display = 'none'; // Se já foi, esconde imediatamente
+                return; // Para a execução do script do popup
+            }
+
+            const closePopup = () => {
+                popup.style.opacity = '0';
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                    // Salva no localStorage que o popup foi exibido
+                    localStorage.setItem('gtdMasterPopupShown', 'true');
+                }, 300); // Corresponde à duração da transição
+            };
+
+            closeBtn.addEventListener('click', closePopup);
+            
+            popup.addEventListener('click', function(event) {
+                if (event.target === popup) {
+                    closePopup();
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
