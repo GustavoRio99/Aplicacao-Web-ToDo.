@@ -7,12 +7,46 @@ Este projeto foi criado como um exercício prático para aplicar conceitos de de
 A interface utiliza o Neumorfismo, um estilo de design que usa sombras e luzes suaves para criar uma aparência tátil e moderna, fazendo com que os elementos pareçam flutuar na tela.
 
 <img width="1197" height="773" alt="image" src="https://github.com/user-attachments/assets/075c6639-665e-4852-8452-02285595a42a" />
+---------------------
+<img width="749" height="649" alt="image" src="https://github.com/user-attachments/assets/218f930f-630b-4963-8745-84bcdc8cede1" />
+Atualizacao 1.1
 
+<img width="943" height="639" alt="2" src="https://github.com/user-attachments/assets/f76c0b30-1a14-4892-abdd-6f597ff1a47f" />
+Atualizacao 1.1
+
+<img width="863" height="581" alt="image" src="https://github.com/user-attachments/assets/40e8e486-e588-41a8-99eb-c84d5af64528" />
+atualizacao 1.1
+
+<img width="867" height="617" alt="image" src="https://github.com/user-attachments/assets/46112ce9-6ccc-4a73-ade0-4c53aba0f8b8" />
+atualizacao 1.1
+
+<img width="845" height="586" alt="image" src="https://github.com/user-attachments/assets/e3463e8c-bb95-4d58-a8f4-9fc7f5e6158f" />
+
+🎉 Release v1.1.0 - A Atualização de Experiência e Arquitetura
+Esta é uma grande atualização para o GTD Master, focada em transformar a aplicação em uma experiência de usuário moderna, intuitiva e robusta. Deixamos para trás a interface básica e reconstruímos a interação, além de refatorarmos o backend para seguir as melhores práticas.
+
+✨ O Que Há de Novo?
+🎨 Nova Interface com Design Neumórfico
+
+🚀 Edição de Tarefas Dinâmica e Intuitiva
+A funcionalidade de edição foi totalmente repensada com foco em UX:
+
+Clique para Editar: Para editar uma tarefa, basta clicar diretamente sobre o texto dela.
+
+Salvamento Automático: As alterações são salvas ao pressionar Enter ou ao clicar fora do campo de texto.
+
+Cancelamento Fácil: Pressione Escape (Esc) para cancelar a edição a qualquer momento.
+
+onboarding de Usuário
+Popup de Boas-Vindas: Na primeira visita, um popup informativo aparece para guiar o usuário sobre as novas dinâmicas de edição e conclusão de tarefas. Esta mensagem só é exibida uma vez.
+
+---------------
 
 ✨ Funcionalidades
 Adicionar Tarefas: Crie novas tarefas através de um campo de texto intuitivo.
 
-Listar Tarefas: Visualize todas as suas tarefas pendentes e concluídas.
+Listar Tarefas e edite: Visualize todas as suas tarefas pendentes e concluídas e alem disso coma nova atualizacao 1.1
+voce poderar editar tarefas existentes.
 
 Marcar como Concluída: Altere o status de uma tarefa com um único clique.
 
@@ -89,6 +123,7 @@ src/main/resources/
 
 📄 Licença
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
+
 
 
 
